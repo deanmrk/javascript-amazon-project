@@ -77,6 +77,12 @@ addCartButton.forEach( (button) => {
       cart.push({productId: productId, quantity: 1});
     }
 
-    console.log(cart)
+    //CART WITH LIVE TOTAL QUANTITY 
+    let cartQty = 0;
+    cart.forEach( qty => { //first check the total qty of the cart
+      cartQty += qty.quantity; //add the qty in the variable
+    })
+    document.querySelector('.js-cart-quantity').innerHTML = cartQty; //and save it to that html using DOM
+
   });
 });
