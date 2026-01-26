@@ -29,7 +29,7 @@ products.forEach( (product) => {
           </div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class="js-selector-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -45,7 +45,7 @@ products.forEach( (product) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
+          <div class="added-to-cart trigger added-msg-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -60,22 +60,49 @@ products.forEach( (product) => {
 });
 productGrid.innerHTML = productHTML;
 
+
 let timeoutIdMessage;
 const addCartButton = document.querySelectorAll('.js-add-to-cart');
-let timeoutId;
+
+//ADD TO CART BUTTON
 addCartButton.forEach( (button) => {
   button.addEventListener('click', () => {
-    const productId = button.dataset.productId //this will get the id of the product add to cart button
+    const { productId } = button.dataset //this will get the id of the product add to cart button
+
+    const selectValue = document.querySelector(`.js-selector-${productId}`);
+    const quantity = Number(selectValue.value);
+
+    addtoCart(productId, quantity);
+    addMessage(productId);
+    liveQuantity(quantity)
   
-    let matchingItem;
+  });
+});
 
-    cart.forEach( (item) => {
-      if (productId === item.productId) {
-        matchingItem = item;
-      }
-    })
 
-    //ADDED MESSAGE
+function addtoCart(productId, quantity) {
+  let matchingItem;
+
+  cart.forEach( (item) => {
+    if (productId === item.productId) {
+      matchingItem = item;
+    }
+  })
+
+  //check if the matchingItem is true
+  if (matchingItem) {
+    matchingItem.quantity += 1;
+  } 
+  else {
+    cart.push({productId, quantity});
+  }
+}
+
+
+function addMessage(productId) {
+  const addedMsg = document.querySelector(`.added-msg-${productId}`);
+
+  //ADDED MESSAGE
     addedMsg.classList.add('added-to-cart-visible');
 
     setTimeout( () => {
@@ -89,22 +116,13 @@ addCartButton.forEach( (button) => {
 
       timeoutIdMessage = timeoutId;
     }) //doesnt need a timer
+}
 
-
-    //check if the matchingItem is true
-    if (matchingItem) {
-      matchingItem.quantity += 1;
-    } 
-    else {
-      cart.push({productId: productId, quantity: 1});
-    }
-
-    //CART WITH LIVE TOTAL QUANTITY 
-    let cartQty = 0;
-    cart.forEach( (qty) => { //first check the total qty of the cart
-      cartQty += qty.quantity; //add the qty in the variable
-    })
-    document.querySelector('.js-cart-quantity').innerHTML = cartQty; //and save it to that html using DOM
-
-  });
-});
+function liveQuantity(quantity) {
+//CART WITH LIVE TOTAL QUANTITY 
+  let cartQty = 0;
+  cart.forEach( (qty) => { //first check the total qty of the cart
+    cartQty += qty.quantity; //add the qty in the variable
+  })
+  document.querySelector('.js-cart-quantity').innerHTML = cartQty; //and save it to that html using DOM
+}
