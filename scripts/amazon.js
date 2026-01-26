@@ -29,7 +29,7 @@ products.forEach( (product) => {
           </div>
 
           <div class="product-quantity-container">
-            <select class="js-selector-${product.id}">
+            <select>
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -45,7 +45,7 @@ products.forEach( (product) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart js-added-to-cart-${product.id}">
+          <div class="added-to-cart">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -58,35 +58,15 @@ products.forEach( (product) => {
     `;
 
 });
- productGrid.innerHTML = productHTML;
+productGrid.innerHTML = productHTML;
 
+let timeoutIdMessage;
 const addCartButton = document.querySelectorAll('.js-add-to-cart');
 let timeoutId;
 addCartButton.forEach( (button) => {
   button.addEventListener('click', () => {
-    const {productId} = button.dataset //this will get the id of the product add to cart button
-    const selector = document.querySelector(`.js-selector-${productId}`);
-    const quantity = Number(selector.value); //need to convert to number, so that it will not appear string
-
-    //ADDED MESSAGE
-    const addedMsg = document.querySelector(`.js-added-to-cart-${productId}`);
-    addedMsg.classList.add('triggered')
-
-    setTimeout( () => {
-      if (timeoutId) { //check first if the timeout is running
-        clearTimeout(timeoutId)
-        
-      }
-
-      const timeoutMsg = setTimeout( () => {
-        addedMsg.classList.remove('triggered')
-      }, 1000)
-
-      timeoutId = timeoutMsg;
-    }) ////doesnt need a timer
-    
-
-
+    const productId = button.dataset.productId //this will get the id of the product add to cart button
+  
     let matchingItem;
 
     cart.forEach( (item) => {
@@ -95,11 +75,28 @@ addCartButton.forEach( (button) => {
       }
     })
 
+    //ADDED MESSAGE
+    addedMsg.classList.add('added-to-cart-visible');
+
+    setTimeout( () => {
+      if (timeoutIdMessage) {
+        clearTimeout(timeoutIdMessage)
+      }
+
+      const timeoutId = setTimeout(() => {
+        addedMsg.classList.remove('added-to-cart-visible');
+      }, 1500);
+
+      timeoutIdMessage = timeoutId;
+    }) //doesnt need a timer
+
+
+    //check if the matchingItem is true
     if (matchingItem) {
       matchingItem.quantity += 1;
     } 
     else {
-      cart.push({productId, quantity});
+      cart.push({productId: productId, quantity: 1});
     }
 
     //CART WITH LIVE TOTAL QUANTITY 
@@ -109,7 +106,5 @@ addCartButton.forEach( (button) => {
     })
     document.querySelector('.js-cart-quantity').innerHTML = cartQty; //and save it to that html using DOM
 
-
-    console.log(cart)
   });
 });
