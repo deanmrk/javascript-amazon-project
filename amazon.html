@@ -57,9 +57,20 @@
       </div>
     </div>
 
-  <script src="data/cart.js"></script>
-  <script src="data/products.js"></script>
-  <script src="scripts/amazon.js"></script>
+  <!--
+    DOESNT WORK IF NO LIVE SERVER, U NEED LIVE SERVER WHEN USING module
+
+  1ST CREATE A FILE
+  2ND: Dont load the file with a <script>
+  3RD: Add a type="module" attribute
+  4TH: Export the variable u want to use
+  5TH: Import the variable u want to use
+  -->
+
+
+  <!--<script src="data/cart.js"></script>-->
+  <!-- <script src="data/products.js"></script> -->
+  <script type="module" src="scripts/amazon.js"></script> <!--Add type="module" in the main to access export and import-->
 
   </body>
 </html> 

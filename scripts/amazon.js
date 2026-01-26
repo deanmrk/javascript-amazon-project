@@ -1,3 +1,6 @@
+import { cart } from "../data/cart.js"; //Access the cart variable from cart.js / can use "as" to rename that variable
+import { products } from "../data/products.js"; //Access the products variable from products.js
+
 const productGrid = document.querySelector('.products-grid')
 let productHTML = '';
 products.forEach( (product) => {
@@ -26,7 +29,7 @@ products.forEach( (product) => {
           </div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class="js-selector-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -42,7 +45,7 @@ products.forEach( (product) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
+          <div class="added-to-cart js-added-to-cart-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -58,10 +61,32 @@ products.forEach( (product) => {
  productGrid.innerHTML = productHTML;
 
 const addCartButton = document.querySelectorAll('.js-add-to-cart');
+let timeoutId;
 addCartButton.forEach( (button) => {
   button.addEventListener('click', () => {
-    const productId = button.dataset.productId //this will get the id of the product add to cart button
-  
+    const {productId} = button.dataset //this will get the id of the product add to cart button
+    const selector = document.querySelector(`.js-selector-${productId}`);
+    const quantity = Number(selector.value); //need to convert to number, so that it will not appear string
+
+    //ADDED MESSAGE
+    const addedMsg = document.querySelector(`.js-added-to-cart-${productId}`);
+    addedMsg.classList.add('triggered')
+
+    setTimeout( () => {
+      if (timeoutId) { //check first if the timeout is running
+        clearTimeout(timeoutId)
+        
+      }
+
+      const timeoutMsg = setTimeout( () => {
+        addedMsg.classList.remove('triggered')
+      }, 1000)
+
+      timeoutId = timeoutMsg;
+    }) ////doesnt need a timer
+    
+
+
     let matchingItem;
 
     cart.forEach( (item) => {
@@ -74,15 +99,17 @@ addCartButton.forEach( (button) => {
       matchingItem.quantity += 1;
     } 
     else {
-      cart.push({productId: productId, quantity: 1});
+      cart.push({productId, quantity});
     }
 
     //CART WITH LIVE TOTAL QUANTITY 
     let cartQty = 0;
-    cart.forEach( qty => { //first check the total qty of the cart
+    cart.forEach( (qty) => { //first check the total qty of the cart
       cartQty += qty.quantity; //add the qty in the variable
     })
     document.querySelector('.js-cart-quantity').innerHTML = cartQty; //and save it to that html using DOM
 
+
+    console.log(cart)
   });
 });

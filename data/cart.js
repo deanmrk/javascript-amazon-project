@@ -1,1 +1,1 @@
-const cart = [];
+export const cart = []; //EXPORT THE CART VARIABLE TO ACCESS IN THE amazon.js
