@@ -1,4 +1,4 @@
-import { cart } from "../data/cart.js"; //Access the cart variable from cart.js / can use "as" to rename that variable
+import { cart, addtoCart } from "../data/cart.js"; //Access the cart, addtoCart variable from cart.js / can use "as" to rename that variable
 import { products } from "../data/products.js"; //Access the products variable from products.js
 
 const productGrid = document.querySelector('.products-grid')
@@ -74,29 +74,10 @@ addCartButton.forEach( (button) => {
 
     addtoCart(productId, quantity);
     addMessage(productId);
-    liveQuantity(quantity)
+    liveQuantity(quantity);
   
   });
 });
-
-
-function addtoCart(productId, quantity) {
-  let matchingItem;
-
-  cart.forEach( (item) => {
-    if (productId === item.productId) {
-      matchingItem = item;
-    }
-  })
-
-  //check if the matchingItem is true
-  if (matchingItem) {
-    matchingItem.quantity += 1;
-  } 
-  else {
-    cart.push({productId, quantity});
-  }
-}
 
 
 function addMessage(productId) {
