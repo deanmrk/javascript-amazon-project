@@ -1,5 +1,7 @@
 import { cart, addtoCart } from "../data/cart.js"; //Access the cart, addtoCart variable from cart.js / can use "as" to rename that variable
 import { products } from "../data/products.js"; //Access the products variable from products.js
+import { formatCurrency } from "./utils/money.js"; //using format currency function
+
 
 const productGrid = document.querySelector('.products-grid')
 let productHTML = '';
@@ -25,7 +27,7 @@ products.forEach( (product) => {
           </div>
 
           <div class="product-price">
-            $${(product.priceCents / 100).toFixed(2)}
+            $${formatCurrency(product.priceCents)} <!--uses the format currency function-->
           </div>
 
           <div class="product-quantity-container">
