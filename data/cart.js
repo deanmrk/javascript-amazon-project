@@ -30,3 +30,7 @@ export function addtoCart(productId, quantity) {
     cart.push({productId, quantity});
   }
 }
+
+function removeFromCart(productId) {
+  
+}

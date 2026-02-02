@@ -41,7 +41,7 @@ cart.forEach( cartItem => { //if one variable is being used, u can use it withou
                 <span class="update-quantity-link link-primary">
                 Update
                 </span>
-                <span class="delete-quantity-link link-primary">
+                <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingProduct.id}">
                 Delete
                 </span>
             </div>
@@ -54,7 +54,7 @@ cart.forEach( cartItem => { //if one variable is being used, u can use it withou
 
             <div class="delivery-option">
                 <input type="radio" class="delivery-option-input"
-                name="delivery-option-${matchingProduct.id}">
+                name="delivery-option-${matchingProduct.id}"> <!--Uses the product id instead of same name value-->
                 <div>
                 <div class="delivery-option-date">
                     Tuesday, June 21
@@ -93,5 +93,12 @@ cart.forEach( cartItem => { //if one variable is being used, u can use it withou
     </div>
     `;
 });
-
 container.innerHTML = itemHTML;
+
+const deleteButton = document.querySelectorAll('.js-delete-link');
+deleteButton.forEach( item => {
+    item.addEventListener('click', () => {
+        const productId = item.dataset.productId;
+        console.log(productId)
+    })
+})
